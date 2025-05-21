@@ -9,7 +9,7 @@ export default function SideBar(){
           display: "flex",
           maxWidth: "100%",
           justifyContent: "end",
-          marginRight: "15%",
+          marginRight: "5rem",
           marginTop: "2rem",
           gap: 5,
         }}

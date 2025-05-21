@@ -6,13 +6,13 @@ export default function Main({children}:{children: ReactNode}){
     return(        <Paper
           sx={
             {
-              width: "52vw",
+              width: "100%",
               height: "80vh",
               borderRadius: 5,
               backgroundColor: "rgb(245 248 254)",
               boxShadow: 0,
               marginTop:'2rem',
-              marginLeft: '15vw',
+              marginLeft: '5rem',
             }
           }
         >
