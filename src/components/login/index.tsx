@@ -1,11 +1,30 @@
 "use client";
 
-import { Box, Button, Divider, Link, Paper, TextField } from "@mui/material";
+import { useRouter } from "next/navigation";
+
+import {
+  Box,
+  Button,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Link,
+  Paper,
+  TextField,
+} from "@mui/material";
+
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 export default function LoginPage() {
+  const navigate = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const [nationalId, setNationalId] = useState("");
   const [password, setPassword] = useState("");
+  const onClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -21,8 +40,8 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Login successful: ", data);
+        console.log(response);
+        navigate.push("/dashboard");
       } else {
         alert("username or password is wrong!");
       }
@@ -66,27 +85,53 @@ export default function LoginPage() {
 
           <TextField
             label="شناسه ملی"
+            fullWidth
             value={nationalId}
-            onChange={(e)=>setNationalId(e.target.value)}
+            onChange={(e) => setNationalId(e.target.value)}
             placeholder="شناسه ملی خود را وارد کنید"
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: 3,
                 backgroundColor: "white",
+                "&.Mui-focused": {
+                  boxShadow: 5, // Apply shadow when focused
+                },
+              },
+              "&:hover": {
+                boxShadow: 5,
+                borderRadius: 3,
               },
             }}
           ></TextField>
           <TextField
-            type="password"
+            fullWidth
+            type={showPassword ? "text" : "password"}
             label="رمز عبور"
             value={password}
-            onChange={(e)=>setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="رمز عبور خود را وارد کنید"
             sx={{
               "& .MuiOutlinedInput-root": {
                 borderRadius: 3,
                 backgroundColor: "white",
+                "&.Mui-focused": {
+                  boxShadow: 5, // Apply shadow when focused
+
+                },
               },
+              "&:hover": {
+                boxShadow: 1,
+                borderRadius: 3,
+              },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => onClickShowPassword()}>
+                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
           ></TextField>
           <Button
