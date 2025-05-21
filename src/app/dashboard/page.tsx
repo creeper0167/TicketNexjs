@@ -51,7 +51,6 @@ export default function Page() {
               <TableBody>
                 <TableRow>
                   <TableCell>248</TableCell>
-                  
                   <TableCell>اصلاح گزارش</TableCell>
                   <TableCell>کانتینر خالی</TableCell>
                   <TableCell>در حال بررسی</TableCell>
