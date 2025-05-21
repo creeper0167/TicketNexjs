@@ -1,5 +1,6 @@
 import { AccountCircle } from "@mui/icons-material";
 import { AppBar, IconButton, Toolbar } from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default function NavBar(){
     return (      <div style={{ display: "flex", justifyContent: "center" }}>

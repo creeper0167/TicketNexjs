@@ -21,6 +21,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "next/link";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
+import Main from "@/components/main";
 
 export default function Page() {
   return (
@@ -32,107 +33,9 @@ export default function Page() {
       }}
     >
       <NavBar />
-      <Box>
+      <Box sx={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+        <Main />
         <SideBar />
-        <Paper
-          sx={
-            {
-              // width: "52vw",
-              // height: "80vh",
-              // borderRadius: 5,
-              // backgroundColor: "rgb(245 248 254)",
-              // boxShadow: 0,
-            }
-          }
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "2rem",
-            }}
-          >
-            <h1 style={{ fontWeight: 900 }}>تیکت های من</h1>
-          </div>
-
-          <TableContainer
-            style={{
-              direction: "rtl",
-              marginTop: "3rem",
-              justifyContent: "center",
-            }}
-          >
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow style={{ textAlign: "center" }}>
-                  <TableCell>ردیف</TableCell>
-                  <TableCell>شماره تیکت</TableCell>
-                  <TableCell>نوع تیکت</TableCell>
-                  <TableCell>موضوع</TableCell>
-                  <TableCell>نام واحد</TableCell>
-                  <TableCell>فایل ضمیمه</TableCell>
-                  <TableCell>آخرین وضعیت</TableCell>
-                  <TableCell>تاریخ</TableCell>
-                  <TableCell>عملیات</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>1</TableCell>
-                  <TableCell>248</TableCell>
-                  <TableCell>راهنمایی</TableCell>
-                  <TableCell>اصلاح گزارش</TableCell>
-                  <TableCell>کانتینر خالی</TableCell>
-                  <TableCell>دارد</TableCell>
-                  <TableCell>در حالی بررسی</TableCell>
-                  <TableCell>1403/20/23</TableCell>
-                  <TableCell>
-                    <IconButton>
-                      <Visibility></Visibility>
-                    </IconButton>
-                    <IconButton>
-                      <Edit></Edit>
-                    </IconButton>
-                    <IconButton>
-                      <Delete></Delete>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>2</TableCell>
-                  <TableCell>244</TableCell>
-                  <TableCell>راهنمایی</TableCell>
-                  <TableCell>اصلاح گزارش</TableCell>
-                  <TableCell>کانتینر خالی</TableCell>
-                  <TableCell>دارد</TableCell>
-                  <TableCell>
-                    <span
-                      style={{
-                        backgroundColor: "rgb(250 195 150 / .5)",
-                        borderRadius: 2,
-                        padding: "0.5rem",
-                      }}
-                    >
-                      در حالی بررسی
-                    </span>
-                  </TableCell>
-                  <TableCell>1403/20/23</TableCell>
-                  <TableCell>
-                    <IconButton>
-                      <Visibility></Visibility>
-                    </IconButton>
-                    <IconButton>
-                      <Edit></Edit>
-                    </IconButton>
-                    <IconButton>
-                      <Delete></Delete>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
         {/* SideBar */}
       </Box>{" "}
     </Box>
