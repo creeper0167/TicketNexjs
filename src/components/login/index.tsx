@@ -136,7 +136,8 @@ export default function LoginPage() {
           ></TextField>
           <Button
             variant="contained"
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
+            onClick={()=>{navigate.push("/dashboard")}}
             sx={{ borderRadius: 3 }}
           >
             ورود

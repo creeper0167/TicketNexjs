@@ -1,7 +1,8 @@
 import { Delete, Edit, Visibility } from "@mui/icons-material";
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { ReactNode } from "react";
 
-export default function Main(){
+export default function Main({children}:{children: ReactNode}){
     return(        <Paper
           sx={
             {
@@ -15,6 +16,6 @@ export default function Main(){
             }
           }
         >
-          
+          {children}
         </Paper>);
 }
