@@ -32,7 +32,7 @@ export default function SideBar(){
               <Link href={"/dashboard/addTicket"}>
                 <ListItemButton
                   sx={{
-                    gap: 5,
+                    gap: 2,
                     marginRight: "1rem",
                     "&:hover": {
                       backgroundColor: "rgb(66 195 223 / .08)",
@@ -40,8 +40,8 @@ export default function SideBar(){
                     },
                   }}
                 >
-                  تیکت جدید
                   <AddCircleIcon />
+                  تیکت جدید
                 </ListItemButton>
               </Link>
             </ListItem>
@@ -49,7 +49,7 @@ export default function SideBar(){
               <Link href={"/dashboard"}>
                 <ListItemButton
                   sx={{
-                    gap: 5,
+                    gap: 2,
                     marginRight: "1rem",
                     "&:hover": {
                       backgroundColor: "rgb(66 195 223 / .08)",
@@ -57,6 +57,7 @@ export default function SideBar(){
                     },
                   }}
                 >
+                  <Visibility />
                   مشاهده همه تیکت ها
                 </ListItemButton>
               </Link>
