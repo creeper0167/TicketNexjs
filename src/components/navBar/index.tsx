@@ -1,6 +1,5 @@
 import { AccountCircle } from "@mui/icons-material";
 import { AppBar, Button, IconButton, Toolbar } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 export default function NavBar() {

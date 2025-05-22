@@ -4,13 +4,10 @@ import { useRef, useState } from "react";
 import Main from "@/components/main";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
-import { Attachment, CloudUpload, Send, Visibility } from "@mui/icons-material";
+import { Attachment, Send } from "@mui/icons-material";
 import {
   Box,
   Button,
-  FormControl,
-  FormHelperText,
-  IconButton,
   InputAdornment,
   OutlinedInput,
   TextField,
@@ -25,6 +22,7 @@ export default function AddTicket() {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       setFileName(e.target.files[0].name)
+      console.log(selectedFile);
     }
   };
   const handlUploadButtonClick = () => {

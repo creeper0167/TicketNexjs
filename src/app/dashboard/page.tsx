@@ -1,14 +1,9 @@
 "use client";
 
-import { AccountCircle, Delete, Edit, Visibility } from "@mui/icons-material";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
-  AppBar,
   Box,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -17,8 +12,6 @@ import {
   TableRow,
   Toolbar,
 } from "@mui/material";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Link from "next/link";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
 import Main from "@/components/main";

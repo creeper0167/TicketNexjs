@@ -1,5 +1,4 @@
-import { Delete, Edit, Visibility } from "@mui/icons-material";
-import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Paper } from "@mui/material";
 import { ReactNode } from "react";
 
 export default function Main({children}:{children: ReactNode}){

@@ -27,27 +27,29 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async () => {
-    try {
-      const response = await fetch("https://localhost:7160/api/Login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nationalId,
-          password,
-        }),
-      });
+    // try {
+    //   const response = await fetch("https://localhost:7160/api/Login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       nationalId,
+    //       password,
+    //     }),
+    //   });
 
-      if (response.ok) {
-        console.log(response);
-        navigate.push("/dashboard");
-      } else {
-        alert("username or password is wrong!");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    //   if (response.ok) {
+    //     console.log(response);
+    //     navigate.push("/dashboard");
+    //   } else {
+    //     alert("username or password is wrong!");
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    console.log('clicked');
+    navigate.push("/dashboard");
   };
 
   return (
@@ -150,7 +152,7 @@ export default function LoginPage() {
           <Button
             variant="contained"
             // onClick={handleSubmit}
-            onClick={()=>{navigate.push("/dashboard")}}
+            onClick={handleSubmit}
             sx={{ borderRadius: 3 }}
           >
             ورود
