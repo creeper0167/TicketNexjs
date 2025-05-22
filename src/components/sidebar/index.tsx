@@ -1,4 +1,4 @@
-import { Delete, Edit, Logout, Settings, Visibility } from "@mui/icons-material";
+import { Logout, Settings, Visibility } from "@mui/icons-material";
 import {
   Box,
   List,
