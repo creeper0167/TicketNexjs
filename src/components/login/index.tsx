@@ -59,6 +59,19 @@ export default function LoginPage() {
         alignItems: "center",
       }}
     >
+            <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img
+          className="hidden md:inline"
+          src="/images/servicenow-ticketing.png"
+        />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -146,19 +159,7 @@ export default function LoginPage() {
           <Link>سامانه تیکت بستری امن در تسهیل امور</Link>
         </Paper>
       </Box>
-      <Box
-        sx={{
-          height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <img
-          className="hidden md:inline"
-          src="/images/servicenow-ticketing.png"
-        />
-      </Box>
+
     </Box>
   );
 }
