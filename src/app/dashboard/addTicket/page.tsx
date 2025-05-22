@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import Main from "@/components/main";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
-import { CloudUpload, Send, Visibility } from "@mui/icons-material";
+import { Attachment, CloudUpload, Send, Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -17,12 +17,14 @@ import {
 } from "@mui/material";
 
 export default function AddTicket() {
+  const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const handleSubmit = () => {};
+  const handleSubmit = () => {console.log("submit")};
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
+      setFileName(e.target.files[0].name)
     }
   };
   const handlUploadButtonClick = () => {
@@ -78,30 +80,33 @@ export default function AddTicket() {
               sx={{ backgroundColor: "white" }}
               multiline
               rows={7}
-              label="شرح"
+              placeholder="پیام خود را بنویسید..."
               inputProps={{
                 dir: "rtl",
               }}
               type="text"
             ></TextField>
-            <div style={{ display: "flex", gap: 5, direction: "rtl" }}>
+            <div>
+              <label id="attachmentFileName">{fileName}</label>
+            </div>
+            <div style={{ display: "flex", gap: 5, direction: "rtl", justifyContent:"end" }}>
               <Button
                 onClick={handlUploadButtonClick}
                 variant="contained"
-                sx={{ gap: 2 }}
+                sx={{ borderRadius:3, gap: 2 }}
               >
-                <CloudUpload />
+                <Attachment />
                 آپلود فایل
                 <input
                   type="file"
                   ref={fileInputRef}
-                  // onChange={handleFileChange}
+                  onChange={handleFileChange}
                   hidden
                 />
               </Button>
-              <Button variant="contained" sx={{ gap: 2 }}>
+              <Button onClick={handleSubmit} variant="contained" sx={{borderRadius:3, gap: 2 }}>
                 <Send />
-                ثبت تیکت
+                ارسال پیام
               </Button>
             </div>
           </Box>
