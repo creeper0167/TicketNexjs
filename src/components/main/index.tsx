@@ -12,7 +12,7 @@ export default function Main({children}:{children: ReactNode}){
               backgroundColor: "rgb(245 248 254)",
               boxShadow: 0,
               marginTop:'2rem',
-              marginLeft: '5rem',
+              marginRight: '5rem',
             }
           }
         >

@@ -33,12 +33,24 @@ export default function Page() {
       }}
     >
       <NavBar />
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 5 }}>
+      <Box
+        sx={{
+          gap: 5,
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <SideBar />
         <Main>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 5 }}><h1>تیکت های من</h1></div>
-          <TableContainer sx={{ direction: 'rtl', marginTop: 5, padding:5 }}>
+          <div
+            style={{ display: "flex", justifyContent: "center", marginTop: 5 }}
+          >
+            <h1>تیکت های من</h1>
+          </div>
+          <TableContainer sx={{ marginTop: 5, padding: 5 }}>
             <Table>
-              <TableHead sx={{backgroundColor:'white'}}>
+              <TableHead sx={{ backgroundColor: "white" }}>
                 <TableRow>
                   <TableCell>شماره تیکت</TableCell>
                   <TableCell>عنوان</TableCell>
@@ -71,7 +83,6 @@ export default function Page() {
             </Table>
           </TableContainer>
         </Main>
-        <SideBar />
         {/* SideBar */}
       </Box>
     </Box>

@@ -4,7 +4,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { anjoman } from "@/theme/fonts";
 import theme from "@/theme";
-
+import Rtl from "@/theme/rtl";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,12 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fa">
-      <body
-        className={`${anjoman.variable} ${anjoman.className} antialiased`}
-      >
+    <html lang="fa" dir="rtl">
+      <body className={`${anjoman.variable} ${anjoman.className} antialiased`}>
         <AppRouterCacheProvider options={{ key: "css" }}>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <Rtl>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </Rtl>
         </AppRouterCacheProvider>
       </body>
     </html>

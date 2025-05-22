@@ -9,7 +9,7 @@ export default function SideBar(){
           display: "flex",
           maxWidth: "100%",
           justifyContent: "end",
-          marginRight: "5rem",
+          marginLeft: "5rem",
           marginTop: "2rem",
           gap: 5,
         }}
@@ -18,7 +18,6 @@ export default function SideBar(){
 
         <Paper
           sx={{
-            direction: "rtl",
             marginTop: "1 rem",
             backgroundColor: "rgb(245 248 254)",
             width: "300px",
