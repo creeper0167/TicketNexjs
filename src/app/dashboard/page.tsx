@@ -1,6 +1,6 @@
 "use client";
 
-import { AddCircle, ArrowBack, ArrowCircleLeft, ArrowLeft, Delete, Edit, Logout, Settings, Visibility } from "@mui/icons-material";
+import { AddCircle, ArrowBack, Delete, Edit, Logout, Settings, Visibility } from "@mui/icons-material";
 import {
   Box,
   Drawer,
