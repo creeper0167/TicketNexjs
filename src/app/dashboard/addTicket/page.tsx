@@ -87,7 +87,7 @@ export default function AddTicket() {
             <div>
               <label id="attachmentFileName">{fileName}</label>
             </div>
-            <div style={{ display: "flex", gap: 5, direction: "rtl", justifyContent:"end" }}>
+            <div className="flex flex-col gap-5 xs:flex xs:flex-col sm:flex sm:flex-row md:flex max-md:flex max-md:justify-end lg:flex sm:justify-end gap-0 sm:gap-5 xs:gap-5 sm:justify-end xs:justify-end md:justify-end lg:justify-end" style={{ direction: "rtl" }}>
               <Button
                 onClick={handlUploadButtonClick}
                 variant="contained"
