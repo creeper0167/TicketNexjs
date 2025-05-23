@@ -13,12 +13,15 @@ export default function SideBar() {
   return (
     <Box
       sx={{
-        display: "flex",
+        display: {
+          xs:'none',
+          md:'flex'
+        },
         maxWidth: "100%",
         justifyContent: "end",
         marginLeft: "5rem",
         marginTop: "2rem",
-        gap: 5,
+        gap: 5,        
       }}
     >
       <Paper
