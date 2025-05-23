@@ -36,7 +36,7 @@ export default function SideBar() {
       >
         <List sx={{ color: "rgb(85 118 139)" }}>
           <ListItem>
-            <Link href={"/dashboard/addTicket"}>
+            <Link href={"/dashboard/addTicket"} style={{width:'100%'}}>
               <ListItemButton
                 sx={{
                   gap: 2,
@@ -53,7 +53,7 @@ export default function SideBar() {
             </Link>
           </ListItem>
           <ListItem>
-            <Link href={"/dashboard"}>
+            <Link href={"/dashboard"} style={{width:'100%'}}>
               <ListItemButton
                 sx={{
                   gap: 2,
@@ -70,7 +70,7 @@ export default function SideBar() {
             </Link>
           </ListItem>
           <ListItem>
-            <Link href={"/dashboard/settings"}>
+            <Link href={"/dashboard/settings"} style={{width:'100%'}}>
               <ListItemButton sx={{
                   gap: 2,
                   marginRight: "1rem",
@@ -85,7 +85,7 @@ export default function SideBar() {
             </Link>
           </ListItem>
           <ListItem>
-            <Link href={"/logout"}>
+            <Link href={"/logout"} style={{width:'100%'}}>
             <ListItemButton sx={{
                   gap: 2,
                   marginRight: "1rem",
