@@ -1,9 +1,13 @@
 "use client";
 
-import { ArrowLeft, Delete, Edit, Visibility } from "@mui/icons-material";
+import { AddCircle, ArrowBack, ArrowCircleLeft, ArrowLeft, Delete, Edit, Logout, Settings, Visibility } from "@mui/icons-material";
 import {
   Box,
+  Drawer,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
   Table,
   TableBody,
   TableCell,
@@ -14,23 +18,109 @@ import {
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
 import Main from "@/components/main";
+import { useState } from "react";
+import Link from "next/link";
 
 export default function Page() {
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = (newOpen: boolean) => () =>{
+    setOpen(newOpen);
+  }
+
+  const DrawerList = (
+    <Box sx={{width:250}}>
+      <List sx={{ color: "rgb(85 118 139)" }}>
+          <ListItem>
+            <Link href={"/dashboard/addTicket"}>
+              <ListItemButton
+                sx={{
+                  gap: 2,
+                  marginRight: "1rem",
+                  "&:hover": {
+                    backgroundColor: "rgb(66 195 223 / .08)",
+                    borderRadius: 3,
+                  },
+                }}
+              >
+                <AddCircle />
+                تیکت جدید
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href={"/dashboard"}>
+              <ListItemButton
+                sx={{
+                  gap: 2,
+                  marginRight: "1rem",
+                  "&:hover": {
+                    backgroundColor: "rgb(66 195 223 / .08)",
+                    borderRadius: 3,
+                  },
+                }}
+              >
+                <Visibility />
+                مشاهده همه تیکت ها
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href={"/dashboard/settings"}>
+              <ListItemButton sx={{
+                  gap: 2,
+                  marginRight: "1rem",
+                  "&:hover": {
+                    backgroundColor: "rgb(66 195 223 / .08)",
+                    borderRadius: 3,
+                  },
+                }}>
+                <Settings />
+                تنظیمات
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          <ListItem>
+            <Link href={"/logout"}>
+            <ListItemButton sx={{
+                  gap: 2,
+                  marginRight: "1rem",
+                  "&:hover": {
+                    backgroundColor: "rgb(66 195 223 / .08)",
+                    borderRadius: 3,
+                  },
+                }}>
+              <Logout />
+              خروج
+            </ListItemButton>
+            </Link>
+          </ListItem>
+        </List>
+    </Box>
+  );
+
+
   return (
-    
+
     <Box
-    sx={{
-      backgroundColor: "rgb(233 237 247)",
-      height: "100vh",
-      boxShadow: 0,
-    }}
+      sx={{
+        backgroundColor: "rgb(233 237 247)",
+        height: "100vh",
+        boxShadow: 0,
+      }}
     >
       <NavBar />
-    <IconButton sx={{
-      display:{
-        md:'none',
-      }
-    }}> <ArrowLeft sx={{fontSize:'5rem',position:'absolute', zIndex:1000}}/></IconButton>
+      <IconButton onClick={toggleDrawer(true)} sx={{
+        display: {
+          md: 'none',
+        },
+        top: '50vh',
+        backgroundColor: '#f5f8fe',
+        padding: 2,
+        borderRadius: 0
+
+      }}> <ArrowBack sx={{ fontSize: '2rem', position: 'absolute', zIndex: 1000 }} />
+      </IconButton>
+
       <Box
         sx={{
           gap: 5,
@@ -82,6 +172,9 @@ export default function Page() {
           </TableContainer>
         </Main>
         {/* SideBar */}
+        <Drawer open={open} sx={{zIndex:1000}} onClose={toggleDrawer(false)}>
+          {DrawerList}
+        </Drawer>
       </Box>
     </Box>
   );

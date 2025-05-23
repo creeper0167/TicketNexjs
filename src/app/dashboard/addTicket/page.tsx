@@ -4,21 +4,27 @@ import { useRef, useState } from "react";
 import Main from "@/components/main";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
-import { Attachment, Send } from "@mui/icons-material";
+import { AddCircle, ArrowBack, Attachment, Logout, Send, Settings, Visibility } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Drawer,
+  IconButton,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemButton,
   OutlinedInput,
   TextField,
 } from "@mui/material";
+import Link from "next/link";
 
 export default function AddTicket() {
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const handleSubmit = () => {console.log("submit")};
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSubmit = () => { console.log("submit") };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
       setFileName(e.target.files[0].name)
@@ -29,6 +35,79 @@ export default function AddTicket() {
     fileInputRef.current?.click();
   };
 
+  const[open,setOpen] = useState(false);
+  const toggleDrawer = (newOpen: boolean)=>()=>{
+    setOpen(newOpen);
+  }
+  const DrawerList = (<Box sx={{width:250}}>
+    <List sx={{ color: "rgb(85 118 139)" }}>
+        <ListItem>
+          <Link href={"/dashboard/addTicket"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <AddCircle />
+              تیکت جدید
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Visibility />
+              مشاهده همه تیکت ها
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard/settings"}>
+            <ListItemButton sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}>
+              <Settings />
+              تنظیمات
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/logout"}>
+          <ListItemButton sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}>
+            <Logout />
+            خروج
+          </ListItemButton>
+          </Link>
+        </ListItem>
+      </List>
+  </Box>);
+
   return (
     <Box
       sx={{
@@ -38,6 +117,17 @@ export default function AddTicket() {
       }}
     >
       <NavBar />
+      <IconButton onClick={toggleDrawer(true)} sx={{
+        display: {
+          md: 'none',
+        },
+        top: '50vh',
+        backgroundColor: '#f5f8fe',
+        padding: 2,
+        borderRadius: 0
+
+      }}> <ArrowBack sx={{ fontSize: '2rem', position: 'absolute', zIndex: 1000 }} />
+      </IconButton>
       <Box
         sx={{
           display: "flex",
@@ -91,7 +181,7 @@ export default function AddTicket() {
               <Button
                 onClick={handlUploadButtonClick}
                 variant="contained"
-                sx={{ borderRadius:3, gap: 2 }}
+                sx={{ borderRadius: 3, gap: 2 }}
               >
                 <Attachment />
                 آپلود فایل
@@ -102,11 +192,14 @@ export default function AddTicket() {
                   hidden
                 />
               </Button>
-              <Button onClick={handleSubmit} variant="contained" sx={{borderRadius:3, gap: 2 }}>
+              <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: 3, gap: 2 }}>
                 <Send />
                 ارسال پیام
               </Button>
             </div>
+            <Drawer open={open} sx={{zIndex:1000}} onClose={toggleDrawer(false)}>
+          {DrawerList}
+        </Drawer>
           </Box>
         </Main>
       </Box>
