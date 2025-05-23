@@ -11,7 +11,7 @@ export default function Main({children}:{children: ReactNode}){
               backgroundColor: "rgb(245 248 254)",
               boxShadow: 0,
               marginTop:{xs:'2rem',md:'2rem', lg:'2rem'},
-              marginRight: {xs:'auto', md:'2rem', lg:'5rem'},
+              marginRight: {xs:'auto', md:'3rem', lg:'5rem'},
               marginLeft:{xs:'auto', md:'2rem', lg:'0'}
             }
           }
