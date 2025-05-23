@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl">
-      <body className={`${anjoman.variable} ${anjoman.className} antialiased`}>
+      <body style={{height:'100vh', backgroundColor:'rgb(233 237 247)'}} className={`${anjoman.variable} ${anjoman.className} antialiased`}>
         <AppRouterCacheProvider options={{ key: "css" }}>
           <Rtl>
             <ThemeProvider theme={theme}>
