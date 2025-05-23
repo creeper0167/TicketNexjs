@@ -35,77 +35,77 @@ export default function AddTicket() {
     fileInputRef.current?.click();
   };
 
-  const[open,setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean)=>()=>{
+  const [open, setOpen] = useState(false);
+  const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   }
-  const DrawerList = (<Box sx={{width:250}}>
+  const DrawerList = (<Box sx={{ width: 250 }}>
     <List sx={{ color: "rgb(85 118 139)" }}>
-        <ListItem>
-          <Link href={"/dashboard/addTicket"}>
-            <ListItemButton
-              sx={{
-                gap: 2,
-                marginRight: "1rem",
-                "&:hover": {
-                  backgroundColor: "rgb(66 195 223 / .08)",
-                  borderRadius: 3,
-                },
-              }}
-            >
-              <AddCircle />
-              تیکت جدید
-            </ListItemButton>
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link href={"/dashboard"}>
-            <ListItemButton
-              sx={{
-                gap: 2,
-                marginRight: "1rem",
-                "&:hover": {
-                  backgroundColor: "rgb(66 195 223 / .08)",
-                  borderRadius: 3,
-                },
-              }}
-            >
-              <Visibility />
-              مشاهده همه تیکت ها
-            </ListItemButton>
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link href={"/dashboard/settings"}>
-            <ListItemButton sx={{
-                gap: 2,
-                marginRight: "1rem",
-                "&:hover": {
-                  backgroundColor: "rgb(66 195 223 / .08)",
-                  borderRadius: 3,
-                },
-              }}>
-              <Settings />
-              تنظیمات
-            </ListItemButton>
-          </Link>
-        </ListItem>
-        <ListItem>
-          <Link href={"/logout"}>
+      <ListItem>
+        <Link href={"/dashboard/addTicket"}>
+          <ListItemButton
+            sx={{
+              gap: 2,
+              marginRight: "1rem",
+              "&:hover": {
+                backgroundColor: "rgb(66 195 223 / .08)",
+                borderRadius: 3,
+              },
+            }}
+          >
+            <AddCircle />
+            تیکت جدید
+          </ListItemButton>
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link href={"/dashboard"}>
+          <ListItemButton
+            sx={{
+              gap: 2,
+              marginRight: "1rem",
+              "&:hover": {
+                backgroundColor: "rgb(66 195 223 / .08)",
+                borderRadius: 3,
+              },
+            }}
+          >
+            <Visibility />
+            مشاهده همه تیکت ها
+          </ListItemButton>
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link href={"/dashboard/settings"}>
           <ListItemButton sx={{
-                gap: 2,
-                marginRight: "1rem",
-                "&:hover": {
-                  backgroundColor: "rgb(66 195 223 / .08)",
-                  borderRadius: 3,
-                },
-              }}>
+            gap: 2,
+            marginRight: "1rem",
+            "&:hover": {
+              backgroundColor: "rgb(66 195 223 / .08)",
+              borderRadius: 3,
+            },
+          }}>
+            <Settings />
+            تنظیمات
+          </ListItemButton>
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link href={"/logout"}>
+          <ListItemButton sx={{
+            gap: 2,
+            marginRight: "1rem",
+            "&:hover": {
+              backgroundColor: "rgb(66 195 223 / .08)",
+              borderRadius: 3,
+            },
+          }}>
             <Logout />
             خروج
           </ListItemButton>
-          </Link>
-        </ListItem>
-      </List>
+        </Link>
+      </ListItem>
+    </List>
   </Box>);
 
   return (
@@ -197,9 +197,9 @@ export default function AddTicket() {
                 ارسال پیام
               </Button>
             </div>
-            <Drawer open={open} sx={{zIndex:1000}} onClose={toggleDrawer(false)}>
-          {DrawerList}
-        </Drawer>
+            <Drawer open={open} sx={{ zIndex: 1000 }} onClose={toggleDrawer(false)}>
+              {DrawerList}
+            </Drawer>
           </Box>
         </Main>
       </Box>

@@ -1,19 +1,22 @@
 "use client";
 
-import { AddCircle, ArrowBack, Delete, Edit, Logout, Settings, Visibility } from "@mui/icons-material";
+import { AddCircle, ArrowBack, Delete, Edit, Logout, Search, Settings, Visibility } from "@mui/icons-material";
 import {
   Box,
   Drawer,
   IconButton,
+  InputAdornment,
   List,
   ListItem,
   ListItemButton,
+  OutlinedInput,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
@@ -136,6 +139,13 @@ export default function Page() {
           >
             <h1>تیکت های من</h1>
           </div>
+
+          <OutlinedInput type="search" sx={{backgroundColor:'white', margin:5, marginBottom:0}}
+          endAdornment={
+            <InputAdornment position="end"><Search /> </InputAdornment>
+          }
+          />
+
           <TableContainer sx={{ marginTop: 5, padding: 5 }}>
             <Table>
               <TableHead sx={{ backgroundColor: "white" }}>
