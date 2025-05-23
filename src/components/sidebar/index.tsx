@@ -15,13 +15,13 @@ export default function SideBar() {
       sx={{
         display: {
           xs:'none',
-          md:'flex'
+          md:'flex',
         },
         maxWidth: "100%",
         justifyContent: "end",
-        marginLeft: "5rem",
+        marginLeft:{md:"3rem", lg:"5rem"},
         marginTop: "2rem",
-        gap: 5,        
+        gap: 5,   
       }}
     >
       <Paper
