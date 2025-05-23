@@ -141,8 +141,8 @@ export default function Page() {
           </div>
 
           <OutlinedInput type="search" sx={{backgroundColor:'white', margin:5, marginBottom:0}}
-          endAdornment={
-            <InputAdornment position="end"><Search /> </InputAdornment>
+          startAdornment={
+            <InputAdornment position="start"><Search /> </InputAdornment>
           }
           />
 
