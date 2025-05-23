@@ -21,7 +21,9 @@ export default function RootLayout({
       <body className={`${anjoman.variable} ${anjoman.className} antialiased`}>
         <AppRouterCacheProvider options={{ key: "css" }}>
           <Rtl>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+            <ThemeProvider theme={theme}>
+              {children}
+            </ThemeProvider>
           </Rtl>
         </AppRouterCacheProvider>
       </body>

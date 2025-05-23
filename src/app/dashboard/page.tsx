@@ -1,6 +1,6 @@
 "use client";
 
-import { Delete, Edit, Visibility } from "@mui/icons-material";
+import { ArrowLeft, Delete, Edit, Visibility } from "@mui/icons-material";
 import {
   Box,
   IconButton,
@@ -17,14 +17,20 @@ import Main from "@/components/main";
 
 export default function Page() {
   return (
+    
     <Box
-      sx={{
-        backgroundColor: "rgb(233 237 247)",
-        height: "100vh",
-        boxShadow: 0,
-      }}
+    sx={{
+      backgroundColor: "rgb(233 237 247)",
+      height: "100vh",
+      boxShadow: 0,
+    }}
     >
       <NavBar />
+    <IconButton sx={{
+      display:{
+        md:'none',
+      }
+    }}> <ArrowLeft sx={{fontSize:'5rem',position:'absolute', zIndex:1000}}/></IconButton>
       <Box
         sx={{
           gap: 5,
