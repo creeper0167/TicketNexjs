@@ -48,7 +48,21 @@ export default function LoginPage() {
     // } catch (error) {
     //   console.log(error);
     // }
-    console.log('clicked');
+
+    const response = await fetch("https://localhost:7160/api/Login/Login", {
+      method: "POST",
+      headers:{
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({nationalId, password})
+    });
+
+    if(!response.ok) throw new Error('login failed');
+
+    const {token} = await response.json();
+    localStorage.setItem('token', token);
+
+    console.log("clicked");
     navigate.push("/dashboard");
   };
 
@@ -59,10 +73,10 @@ export default function LoginPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height:'100vh',
+        height: "100vh",
       }}
     >
-            <Box
+      <Box
         sx={{
           height: "100vh",
           display: "flex",
@@ -132,7 +146,6 @@ export default function LoginPage() {
                 backgroundColor: "white",
                 "&.Mui-focused": {
                   boxShadow: 5, // Apply shadow when focused
-
                 },
               },
               "&:hover": {
@@ -162,7 +175,6 @@ export default function LoginPage() {
           <Link>سامانه تیکت بستری امن در تسهیل امور</Link>
         </Paper>
       </Box>
-
     </Box>
   );
 }

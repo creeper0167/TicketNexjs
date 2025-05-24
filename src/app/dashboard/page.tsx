@@ -1,4 +1,5 @@
 "use client";
+import jwtDecode from 'jwt-decode';
 
 import {
   AddCircle,
@@ -38,7 +39,7 @@ export default function Page() {
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  
+  const [fullName, setFullName] = useState("");
   const [open, setOpen] = useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -60,7 +61,9 @@ export default function Page() {
     ticketStatus: string;
     ticketCreateDate: string;
   }
-
+  
+  const token = localStorage.getItem('token');
+  const user = jwtDecode(token);
   useEffect(() => {
   const fetchData = async () => {
     try {
@@ -163,7 +166,7 @@ export default function Page() {
         boxShadow: 0,
       }}
     >
-      <NavBar />
+      <NavBar fullName={user.fullName} />
       <IconButton
         onClick={toggleDrawer(true)}
         sx={{

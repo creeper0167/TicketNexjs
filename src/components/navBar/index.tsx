@@ -2,7 +2,7 @@ import { AccountCircle } from "@mui/icons-material";
 import { AppBar, Button, IconButton, Toolbar } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
-export default function NavBar() {
+export default function NavBar(props) {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <AppBar
@@ -34,7 +34,7 @@ export default function NavBar() {
               >
                 <AccountCircle />
               </IconButton>
-              <Button sx={{ color: "rgb(85 118 139)" }}>محمدامین ارژنگ</Button>
+              <Button sx={{ color: "rgb(85 118 139)" }}>{props.fullName}</Button>
             </span>
           </div>
           <div>
