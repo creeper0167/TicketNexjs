@@ -1,6 +1,15 @@
 "use client";
 
-import { AddCircle, ArrowBack, Delete, Edit, Logout, Search, Settings, Visibility } from "@mui/icons-material";
+import {
+  AddCircle,
+  ArrowBack,
+  Delete,
+  Edit,
+  Logout,
+  Search,
+  Settings,
+  Visibility,
+} from "@mui/icons-material";
 import {
   Box,
   Drawer,
@@ -15,94 +24,138 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from "@mui/material";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
 import Main from "@/components/main";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Page() {
+  const [rows, setRows] = useState<Tickets[]>([]);
+  const [total, setTotal] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(0);
+  
   const [open, setOpen] = useState(false);
-  const toggleDrawer = (newOpen: boolean) => () =>{
+  const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  interface Tickets {
+    id: number;
+    userGroup: string;
+    ticketSubject: string;
+    ticketStatus: string;
+    ticketCreateDate: string;
   }
 
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`https://localhost:7160/api/Ticket/GetAllTickets?page=${page + 1}&pageSize=${rowsPerPage}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const data = await res.json();
+      setRows(data.items);
+      setTotal(data.totalCount);
+
+    } catch (err) {
+      console.error("Failed to fetch tickets:", err);
+    }
+  };
+  fetchData();
+}, [page, rowsPerPage]);
+
+
   const DrawerList = (
-    <Box sx={{width:250}}>
+    <Box sx={{ width: 250 }}>
       <List sx={{ color: "rgb(85 118 139)" }}>
-          <ListItem>
-            <Link href={"/dashboard/addTicket"}>
-              <ListItemButton
-                sx={{
-                  gap: 2,
-                  marginRight: "1rem",
-                  "&:hover": {
-                    backgroundColor: "rgb(66 195 223 / .08)",
-                    borderRadius: 3,
-                  },
-                }}
-              >
-                <AddCircle />
-                تیکت جدید
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href={"/dashboard"}>
-              <ListItemButton
-                sx={{
-                  gap: 2,
-                  marginRight: "1rem",
-                  "&:hover": {
-                    backgroundColor: "rgb(66 195 223 / .08)",
-                    borderRadius: 3,
-                  },
-                }}
-              >
-                <Visibility />
-                مشاهده همه تیکت ها
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href={"/dashboard/settings"}>
-              <ListItemButton sx={{
-                  gap: 2,
-                  marginRight: "1rem",
-                  "&:hover": {
-                    backgroundColor: "rgb(66 195 223 / .08)",
-                    borderRadius: 3,
-                  },
-                }}>
-                <Settings />
-                تنظیمات
-              </ListItemButton>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href={"/logout"}>
-            <ListItemButton sx={{
-                  gap: 2,
-                  marginRight: "1rem",
-                  "&:hover": {
-                    backgroundColor: "rgb(66 195 223 / .08)",
-                    borderRadius: 3,
-                  },
-                }}>
+        <ListItem>
+          <Link href={"/dashboard/addTicket"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <AddCircle />
+              تیکت جدید
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Visibility />
+              مشاهده همه تیکت ها
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard/settings"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Settings />
+              تنظیمات
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/logout"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
               <Logout />
               خروج
             </ListItemButton>
-            </Link>
-          </ListItem>
-        </List>
+          </Link>
+        </ListItem>
+      </List>
     </Box>
   );
 
-
   return (
-
     <Box
       sx={{
         backgroundColor: "rgb(233 237 247)",
@@ -111,16 +164,22 @@ export default function Page() {
       }}
     >
       <NavBar />
-      <IconButton onClick={toggleDrawer(true)} sx={{
-        display: {
-          md: 'none',
-        },
-        top: '50vh',
-        backgroundColor: '#f5f8fe',
-        padding: 2,
-        borderRadius: 0
-
-      }}> <ArrowBack sx={{ fontSize: '2rem', position: 'absolute', zIndex: 1000 }} />
+      <IconButton
+        onClick={toggleDrawer(true)}
+        sx={{
+          display: {
+            md: "none",
+          },
+          top: "50vh",
+          backgroundColor: "#f5f8fe",
+          padding: 2,
+          borderRadius: 0,
+        }}
+      >
+        {" "}
+        <ArrowBack
+          sx={{ fontSize: "2rem", position: "absolute", zIndex: 1000 }}
+        />
       </IconButton>
 
       <Box
@@ -139,10 +198,14 @@ export default function Page() {
             <h1>تیکت های من</h1>
           </div>
 
-          <OutlinedInput type="search" sx={{backgroundColor:'white', margin:5, marginBottom:0}}
-          startAdornment={
-            <InputAdornment position="start"><Search /> </InputAdornment>
-          }
+          <OutlinedInput
+            type="search"
+            sx={{ backgroundColor: "white", margin: 5, marginBottom: 0 }}
+            startAdornment={
+              <InputAdornment position="start">
+                <Search />{" "}
+              </InputAdornment>
+            }
           />
 
           <TableContainer sx={{ marginTop: 5, padding: 5 }}>
@@ -158,30 +221,35 @@ export default function Page() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell>248</TableCell>
-                  <TableCell>اصلاح گزارش</TableCell>
-                  <TableCell>کانتینر خالی</TableCell>
-                  <TableCell>در حال بررسی</TableCell>
-                  <TableCell>1404/20/20</TableCell>
-                  <TableCell>
-                    <IconButton>
-                      <Visibility></Visibility>
-                    </IconButton>
-                    <IconButton>
-                      <Edit></Edit>
-                    </IconButton>
-                    <IconButton>
-                      <Delete></Delete>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
+                {rows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.ticketSubject}</TableCell>
+                    <TableCell>{row.userGroup}</TableCell>
+                    <TableCell>{row.ticketStatus}</TableCell>
+                    <TableCell>{row.ticketCreateDate}</TableCell>
+                    <TableCell>
+                      <IconButton>
+                        <Visibility />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={total}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </Main>
         {/* SideBar */}
-        <Drawer open={open} sx={{zIndex:1000}} onClose={toggleDrawer(false)}>
+        <Drawer open={open} sx={{ zIndex: 1000 }} onClose={toggleDrawer(false)}>
           {DrawerList}
         </Drawer>
       </Box>
