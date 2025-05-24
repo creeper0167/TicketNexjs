@@ -4,7 +4,15 @@ import { useRef, useState } from "react";
 import Main from "@/components/main";
 import NavBar from "@/components/navBar";
 import SideBar from "@/components/sidebar";
-import { AddCircle, ArrowBack, Attachment, Logout, Send, Settings, Visibility } from "@mui/icons-material";
+import {
+  AddCircle,
+  ArrowBack,
+  Attachment,
+  Logout,
+  Send,
+  Settings,
+  Visibility,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -18,16 +26,38 @@ import {
   TextField,
 } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AddTicket() {
+  const [ticketSubject, setTicketSubject] = useState("");
+  const [ticketDescription, setTicketDescription] = useState("");
   const [fileName, setFileName] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const handleSubmit = () => { console.log("submit") };
+  const navigate = useRouter();
+  const handleSubmit = async () => {
+    const response = await fetch(
+      "https://localhost:7160/api/ticket/addTicket",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ticketSubject,
+          ticketDescription,
+        }),
+      }
+    );
+    if (response.ok) {
+      navigate.push("/dashboard");
+      console.log("submit");
+    }
+  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
-      setFileName(e.target.files[0].name)
+      setFileName(e.target.files[0].name);
       console.log(selectedFile);
     }
   };
@@ -38,75 +68,81 @@ export default function AddTicket() {
   const [open, setOpen] = useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
-  }
-  const DrawerList = (<Box sx={{ width: 250 }}>
-    <List sx={{ color: "rgb(85 118 139)" }}>
-      <ListItem>
-        <Link href={"/dashboard/addTicket"}>
-          <ListItemButton
-            sx={{
-              gap: 2,
-              marginRight: "1rem",
-              "&:hover": {
-                backgroundColor: "rgb(66 195 223 / .08)",
-                borderRadius: 3,
-              },
-            }}
-          >
-            <AddCircle />
-            تیکت جدید
-          </ListItemButton>
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href={"/dashboard"}>
-          <ListItemButton
-            sx={{
-              gap: 2,
-              marginRight: "1rem",
-              "&:hover": {
-                backgroundColor: "rgb(66 195 223 / .08)",
-                borderRadius: 3,
-              },
-            }}
-          >
-            <Visibility />
-            مشاهده همه تیکت ها
-          </ListItemButton>
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href={"/dashboard/settings"}>
-          <ListItemButton sx={{
-            gap: 2,
-            marginRight: "1rem",
-            "&:hover": {
-              backgroundColor: "rgb(66 195 223 / .08)",
-              borderRadius: 3,
-            },
-          }}>
-            <Settings />
-            تنظیمات
-          </ListItemButton>
-        </Link>
-      </ListItem>
-      <ListItem>
-        <Link href={"/logout"}>
-          <ListItemButton sx={{
-            gap: 2,
-            marginRight: "1rem",
-            "&:hover": {
-              backgroundColor: "rgb(66 195 223 / .08)",
-              borderRadius: 3,
-            },
-          }}>
-            <Logout />
-            خروج
-          </ListItemButton>
-        </Link>
-      </ListItem>
-    </List>
-  </Box>);
+  };
+  const DrawerList = (
+    <Box sx={{ width: 250 }}>
+      <List sx={{ color: "rgb(85 118 139)" }}>
+        <ListItem>
+          <Link href={"/dashboard/addTicket"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <AddCircle />
+              تیکت جدید
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Visibility />
+              مشاهده همه تیکت ها
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/dashboard/settings"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Settings />
+              تنظیمات
+            </ListItemButton>
+          </Link>
+        </ListItem>
+        <ListItem>
+          <Link href={"/logout"}>
+            <ListItemButton
+              sx={{
+                gap: 2,
+                marginRight: "1rem",
+                "&:hover": {
+                  backgroundColor: "rgb(66 195 223 / .08)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              <Logout />
+              خروج
+            </ListItemButton>
+          </Link>
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
     <Box
@@ -117,16 +153,22 @@ export default function AddTicket() {
       }}
     >
       <NavBar />
-      <IconButton onClick={toggleDrawer(true)} sx={{
-        display: {
-          md: 'none',
-        },
-        top: '50vh',
-        backgroundColor: '#f5f8fe',
-        padding: 2,
-        borderRadius: 0
-
-      }}> <ArrowBack sx={{ fontSize: '2rem', position: 'absolute', zIndex: 1000 }} />
+      <IconButton
+        onClick={toggleDrawer(true)}
+        sx={{
+          display: {
+            md: "none",
+          },
+          top: "50vh",
+          backgroundColor: "#f5f8fe",
+          padding: 2,
+          borderRadius: 0,
+        }}
+      >
+        {" "}
+        <ArrowBack
+          sx={{ fontSize: "2rem", position: "absolute", zIndex: 1000 }}
+        />
       </IconButton>
       <Box
         sx={{
@@ -156,6 +198,8 @@ export default function AddTicket() {
           >
             <OutlinedInput
               sx={{ backgroundColor: "white" }}
+              value={ticketSubject}
+              onChange={(e)=>{setTicketSubject(e.target.value)}}
               endAdornment={
                 <InputAdornment position="end">:موضوع</InputAdornment>
               }
@@ -166,6 +210,8 @@ export default function AddTicket() {
             />
             <TextField
               sx={{ backgroundColor: "white" }}
+              value={ticketDescription}
+              onChange={(e)=>{setTicketDescription(e.target.value)}}
               multiline
               rows={7}
               placeholder="پیام خود را بنویسید..."
@@ -177,7 +223,10 @@ export default function AddTicket() {
             <div>
               <label id="attachmentFileName">{fileName}</label>
             </div>
-            <div className="flex flex-col gap-5 xs:flex xs:flex-col sm:flex sm:flex-row md:flex max-md:flex max-md:justify-end lg:flex sm:justify-end gap-0 sm:gap-5 xs:gap-5 sm:justify-end xs:justify-end md:justify-end lg:justify-end" style={{ direction: "rtl" }}>
+            <div
+              className="flex flex-col gap-5 xs:flex xs:flex-col sm:flex sm:flex-row md:flex max-md:flex max-md:justify-end lg:flex sm:justify-end gap-0 sm:gap-5 xs:gap-5 sm:justify-end xs:justify-end md:justify-end lg:justify-end"
+              style={{ direction: "rtl" }}
+            >
               <Button
                 onClick={handlUploadButtonClick}
                 variant="contained"
@@ -192,12 +241,20 @@ export default function AddTicket() {
                   hidden
                 />
               </Button>
-              <Button onClick={handleSubmit} variant="contained" sx={{ borderRadius: 3, gap: 2 }}>
+              <Button
+                onClick={handleSubmit}
+                variant="contained"
+                sx={{ borderRadius: 3, gap: 2 }}
+              >
                 <Send />
                 ارسال پیام
               </Button>
             </div>
-            <Drawer open={open} sx={{ zIndex: 1000 }} onClose={toggleDrawer(false)}>
+            <Drawer
+              open={open}
+              sx={{ zIndex: 1000 }}
+              onClose={toggleDrawer(false)}
+            >
               {DrawerList}
             </Drawer>
           </Box>
