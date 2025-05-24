@@ -6,7 +6,7 @@ export default function Main({children}:{children: ReactNode}){
           sx={
             {
               width: {xs:'80%', md:"100%"},
-              height: "80vh",
+              height: 'fit-content',
               borderRadius: 5,
               backgroundColor: "rgb(245 248 254)",
               boxShadow: 0,
