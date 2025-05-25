@@ -1,11 +1,9 @@
 "use client";
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 import {
   AddCircle,
   ArrowBack,
-  Delete,
-  Edit,
   Logout,
   Search,
   Settings,
@@ -13,6 +11,7 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Chip,
   Drawer,
   IconButton,
   InputAdornment,
@@ -35,6 +34,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Page() {
+
   const [rows, setRows] = useState<Tickets[]>([]);
   const [total, setTotal] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -62,18 +62,32 @@ export default function Page() {
     ticketCreateDate: string;
   }
   
-  const token = localStorage.getItem('token');
-  const user = jwtDecode(token);
+  interface tokenPayload {
+    name: string,
+    role: string,
+    fullName: string
+  }
+
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch(`https://localhost:7160/api/Ticket/GetAllTickets?page=${page + 1}&pageSize=${rowsPerPage}`);
+    const fetchData = async () => {
+      try {
+      const token = jwtDecode<tokenPayload>(localStorage.getItem('token')!);
+      const res = await fetch(`https://localhost:7160/api/Ticket/GetAllTickets?page=${page + 1}&pageSize=${rowsPerPage}`, {
+        method: "GET",
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')!}`,
+          'Content-Type': 'application/json'
+        }
+      });
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const data = await res.json();
+
       setRows(data.items);
       setTotal(data.totalCount);
+      setFullName(token.fullName);
+      console.log(token);
 
     } catch (err) {
       console.error("Failed to fetch tickets:", err);
@@ -81,6 +95,18 @@ export default function Page() {
   };
   fetchData();
 }, [page, rowsPerPage]);
+  const getTicketStatusCondition=(status: string)=>{
+    switch(status){
+      case 'در انتظار بررسی':
+        return <Chip label={status} color='success' />;
+        case 'در حال بررسی':
+          return <Chip label={status} color='warning' />;
+          case 'بسته شد':
+            return <Chip label={status} color='error' />;
+            default:
+              return <Chip label={status} color='error' />;
+    }
+  }
 
 
   const DrawerList = (
@@ -166,7 +192,7 @@ export default function Page() {
         boxShadow: 0,
       }}
     >
-      <NavBar fullName={user.fullName} />
+      <NavBar fullNameTitle={fullName} />
       <IconButton
         onClick={toggleDrawer(true)}
         sx={{
@@ -229,7 +255,9 @@ export default function Page() {
                     <TableCell>{row.id}</TableCell>
                     <TableCell>{row.ticketSubject}</TableCell>
                     <TableCell>{row.userGroup}</TableCell>
-                    <TableCell>{row.ticketStatus}</TableCell>
+                    <TableCell>
+                      {getTicketStatusCondition(row.ticketStatus)}
+                      </TableCell>
                     <TableCell>{row.ticketCreateDate}</TableCell>
                     <TableCell>
                       <IconButton>
