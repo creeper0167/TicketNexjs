@@ -72,7 +72,7 @@ export default function Page() {
     const fetchData = async () => {
       try {
       const token = jwtDecode<tokenPayload>(localStorage.getItem('token')!);
-      const res = await fetch(`https://localhost:7160/api/Ticket/GetAllTickets?page=${page + 1}&pageSize=${rowsPerPage}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/Ticket/GetAllTickets?page=${page + 1}&pageSize=${rowsPerPage}`, {
         method: "GET",
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')!}`,
@@ -216,7 +216,7 @@ export default function Page() {
           gap: 5,
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: "start",
         }}
       >
         <SideBar />
@@ -229,7 +229,7 @@ export default function Page() {
 
           <OutlinedInput
             type="search"
-            sx={{ backgroundColor: "white", margin: 5, marginBottom: 0 }}
+            sx={{ backgroundColor: "white", margin: 5, marginBottom: 0, borderRadius:3,width:'30%' }}
             startAdornment={
               <InputAdornment position="start">
                 <Search />{" "}
@@ -239,7 +239,7 @@ export default function Page() {
 
           <TableContainer sx={{ marginTop: 5, padding: 5 }}>
             <Table>
-              <TableHead sx={{ backgroundColor: "white" }}>
+              <TableHead sx={{ backgroundColor: "white", borderRadius:5 }}>
                 <TableRow>
                   <TableCell>شماره تیکت</TableCell>
                   <TableCell>عنوان</TableCell>

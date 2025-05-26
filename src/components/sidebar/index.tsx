@@ -17,11 +17,13 @@ export default function SideBar() {
           xs:'none',
           md:'flex',
         },
+        position:'sticky',
+        top:'2rem',
         maxWidth: "100%",
         justifyContent: "end",
         marginLeft:{md:"3rem", lg:"5rem"},
         marginTop: "2rem",
-        gap: 5,   
+        gap: 5,
       }}
     >
       <Paper
