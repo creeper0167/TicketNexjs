@@ -51,7 +51,7 @@ export default function AddTicket() {
 
   const handleSubmit = async () => {
     const response = await fetch(
-      "https://localhost:7160/api/ticket/addTicket",
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ticket/addTicket`,
       {
         method: "POST",
         headers: {
@@ -193,7 +193,7 @@ export default function AddTicket() {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
+          alignItems: "start",
           gap: 5,
         }}
       >
