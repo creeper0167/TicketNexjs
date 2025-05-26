@@ -55,6 +55,8 @@ export default function Page() {
   const [open, setOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<Tickets | null>(null);
+  const [ticketReplies, setTicketReplies] = useState<Chats[]>([]);
+  
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -67,13 +69,36 @@ export default function Page() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const handleDialogOpen = (ticket: Tickets) => {
+  const handleDialogOpen = async (ticket: Tickets) => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/Ticket/ViewTicketDetails/${ticket.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")!}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("failed to fetch");
+    const data = await res.json();
+    setTicketReplies(data.ticketReplies);
+    console.log(data.ticketReplies);
     setSelectedTicket(ticket);
     setDialogOpen(true);
   };
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
+  interface Chats {
+    replyId: number;
+    ticketId: number;
+    accountId: number;
+    text: string;
+    replyDate: string;
+  }
+
   interface Tickets {
     id: number;
     userGroup: string;
@@ -81,6 +106,7 @@ export default function Page() {
     ticketStatus: string;
     ticketCreateDate: string;
   }
+
 
   interface tokenPayload {
     name: string;
@@ -291,7 +317,7 @@ export default function Page() {
                     </TableCell>
                     <TableCell>{row.ticketCreateDate}</TableCell>
                     <TableCell>
-                      <IconButton onClick={handleDialogOpen}>
+                      <IconButton onClick={() => handleDialogOpen(row)}>
                         <Visibility />
                       </IconButton>
                     </TableCell>
@@ -322,81 +348,46 @@ export default function Page() {
           <DialogContent>
             <DialogContentText></DialogContentText>
 
-            <Box sx={{ overflow: "auto", height: "40rem", padding:1,display:'flex', gap:2, flexWrap:'wrap', flexDirection:"row",justifyContent:"flex-start" }}>
-              <Card sx={{ width: '50%', boxShadow:3, height:'40%', marginRight:'auto' }}>
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    sx={{ color: "text.secondary", fontSize: 14 }}
-                  >
-                    <AccountCircle />
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    be null
-                  </Typography>
-                  <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                    adjective
-                  </Typography>
-                  <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-
-              <Card sx={{ width: '50%', boxShadow:3, height:'40%', marginLeft:'auto' }}>
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    sx={{ color: "text.secondary", fontSize: 14 }}
-                  >
-                    <AccountCircle />
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    be null
-                  </Typography>
-                  <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                    adjective
-                  </Typography>
-                  <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
-
-              <Card sx={{ width: '50%', boxShadow:3, height:'40%', marginRight:'auto' }}>
-                <CardContent>
-                  <Typography
-                    gutterBottom
-                    sx={{ color: "text.secondary", fontSize: 14 }}
-                  >
-                    <AccountCircle />
-                  </Typography>
-                  <Typography variant="h5" component="div">
-                    be null
-                  </Typography>
-                  <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                    adjective
-                  </Typography>
-                  <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small">Learn More</Button>
-                </CardActions>
-              </Card>
+            <Box
+              sx={{
+                overflow: "auto",
+                height: "40rem",
+                padding: 1,
+                display: "flex",
+                gap: 2,
+                flexWrap: "wrap",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+              }}
+            >
+              {selectedTicket && (
+                <Card
+                  sx={{
+                    width: "40%",
+                    boxShadow: 3,
+                    height: "40%",
+                    marginRight: "auto", // or marginRight: "auto" for alternate layout
+                  }}
+                >
+                  <CardContent>
+                    <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
+                      <AccountCircle /> {selectedTicket.userGroup}
+                    </Typography>
+                    <Typography variant="h5">
+                      {selectedTicket.ticketSubject}
+                    </Typography>
+                    <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                      {selectedTicket.ticketStatus}
+                    </Typography>
+                    <Typography variant="body2">
+                      تاریخ ثبت: {selectedTicket.ticketCreateDate}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small">بیشتر</Button>
+                  </CardActions>
+                </Card>
+              )}
             </Box>
 
             <Box sx={{ display: "flex", gap: 2 }}>
@@ -408,10 +399,13 @@ export default function Page() {
                 multiline
                 placeholder="پیام خود را اینجا بنویسید.."
                 startAdornment={
-              <InputAdornment position="start">
-                <IconButton> <AttachFile /></IconButton>
-              </InputAdornment>
-            }
+                  <InputAdornment position="start">
+                    <IconButton>
+                      {" "}
+                      <AttachFile />
+                    </IconButton>
+                  </InputAdornment>
+                }
               ></OutlinedInput>
             </Box>
           </DialogContent>
