@@ -59,7 +59,7 @@ export default function Page() {
   const [ticketId, setTicketId] = useState(0);
   const [accountId, setAccountId] = useState("");
   const [replyText, setReplyText] = useState("");
-
+  const navigate = useRouter();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -73,6 +73,27 @@ export default function Page() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handlCloseTicket = async (ticket) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ticket/closeTicket`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          ticketId,
+        }),
+      }
+    );
+    if (!response.ok) {
+      alert("sth went wrong");
+      setDialogOpen(false);
+    }
+  };
+
   const handleDialogOpen = async (ticket: Tickets) => {
     setTicketId(ticket.id);
     const res = await fetch(
@@ -125,29 +146,30 @@ export default function Page() {
     role: string;
     fullName: string;
   }
-  const navigate = useRouter();
-  const handleSubmitReply = async ()=>{
+  const handleSubmitReply = async () => {
     setReplyText("");
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ticket/addReply`,{
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")!}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        accountId,
-        replyText,
-        ticketId
-      }),
-    });
-    if(response.ok){
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ticket/addReply`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")!}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountId,
+          replyText,
+          ticketId,
+        }),
+      }
+    );
+    if (response.ok) {
       setDialogOpen(false);
       navigate.refresh();
-    }else{
+    } else {
       alert("somting went wrong");
     }
-  }
-
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -380,7 +402,19 @@ export default function Page() {
           open={dialogOpen}
           onClose={handleDialogClose}
         >
-          <DialogTitle sx={{display:'flex', justifyContent:'space-between'}} textAlign={"center"}>جزئیات تیکت <Button color="error">بستن تیکت</Button></DialogTitle>
+          <DialogTitle
+            sx={{ display: "flex", justifyContent: "space-between" }}
+            textAlign={"center"}
+          >
+            جزئیات تیکت{" "}
+            <Button
+              onClick={handlCloseTicket}
+              disabled={selectedTicket?.ticketStatus === "بسته شده"}
+              color="error"
+            >
+              بستن تیکت
+            </Button>
+          </DialogTitle>
           <DialogContent>
             <DialogContentText></DialogContentText>
 
@@ -424,63 +458,76 @@ export default function Page() {
                   </Card>
                 </Box>
               )}
-              
+
               {/* Map over ticketReplies */}
-              {accountId && ticketReplies.map((reply, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "flex",
-                    justifyContent:
-                      reply.account.accountID.toString() === accountId
-                        ? "flex-start"
-                        : "flex-end",
-                  }}
-                >
-                  <Card
+              {accountId &&
+                ticketReplies.map((reply, index) => (
+                  <Box
+                    key={index}
                     sx={{
-                      borderRadius: 5,
-                      marginTop: 5,
-                      width: "60%",
-                      boxShadow: 3,
-                      backgroundColor:
-                        reply.account.accountID.toString() === accountId ? "#d9fdd3" : "white",
+                      display: "flex",
+                      justifyContent:
+                        reply.account.accountID.toString() === accountId
+                          ? "flex-start"
+                          : "flex-end",
                     }}
                   >
-                    <CardContent>
-                      <Typography
-                        sx={{ color: "text.secondary", fontSize: 12 }}
-                      >
-                        پاسخ از کاربر {reply.account.fullName} -{" "}
-                        {new Date(reply.replyDate).toLocaleString("fa-IR")}
-                      </Typography>
-                      <Typography variant="body1" sx={{ marginTop: 1 }}>
-                        {reply.text}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))}
+                    <Card
+                      sx={{
+                        borderRadius: 5,
+                        marginTop: 5,
+                        width: "60%",
+                        boxShadow: 3,
+                        backgroundColor:
+                          reply.account.accountID.toString() === accountId
+                            ? "#d9fdd3"
+                            : "white",
+                      }}
+                    >
+                      <CardContent>
+                        <Typography
+                          sx={{ color: "text.secondary", fontSize: 12 }}
+                        >
+                          پاسخ از کاربر {reply.account.fullName}
+                        </Typography>
+                        <Typography variant="body1" sx={{ marginTop: 1 }}>
+                          {reply.text}
+                        </Typography>
+                        <Typography sx={{fontSize: 12, float:"right"}}>
+                          {new Date(reply.replyDate).toLocaleString("fa-IR")}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                ))}
             </Box>
 
             <Box sx={{ display: "flex", gap: 2 }}>
-              <Button onClick={handleSubmitReply}>
+              <Button
+                disabled={selectedTicket?.ticketStatus === "بسته شده"}
+                onClick={handleSubmitReply}
+              >
                 <Send />
               </Button>
               <OutlinedInput
+                disabled={selectedTicket?.ticketStatus === "بسته شده"}
                 fullWidth
                 multiline
                 placeholder="پیام خود را اینجا بنویسید.."
                 startAdornment={
                   <InputAdornment position="start">
-                    <IconButton>
+                    <IconButton
+                      disabled={selectedTicket?.ticketStatus === "بسته شده"}
+                    >
                       {" "}
                       <AttachFile />
                     </IconButton>
                   </InputAdornment>
                 }
                 value={replyText}
-                onChange={(e)=>{setReplyText(e.target.value);}}
+                onChange={(e) => {
+                  setReplyText(e.target.value);
+                }}
               ></OutlinedInput>
             </Box>
           </DialogContent>
