@@ -37,7 +37,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import NavBar from "@/components/navBar";
@@ -45,6 +44,7 @@ import SideBar from "@/components/sidebar";
 import Main from "@/components/main";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [rows, setRows] = useState<Tickets[]>([]);
@@ -56,7 +56,11 @@ export default function Page() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<Tickets | null>(null);
   const [ticketReplies, setTicketReplies] = useState<Chats[]>([]);
-  
+  const [ticketId, setTicketId] = useState(0);
+  const [accountId, setAccountId] = useState("");
+  const [replyText, setReplyText] = useState("");
+
+
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
@@ -70,6 +74,7 @@ export default function Page() {
     setPage(0);
   };
   const handleDialogOpen = async (ticket: Tickets) => {
+    setTicketId(ticket.id);
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/Ticket/ViewTicketDetails/${ticket.id}`,
       {
@@ -91,10 +96,16 @@ export default function Page() {
     setDialogOpen(false);
   };
 
+  interface Account {
+    accountID: string;
+    fullName: string;
+  }
+
   interface Chats {
     replyId: number;
     ticketId: number;
-    accountId: number;
+    accountID: string;
+    account: Account;
     text: string;
     replyDate: string;
   }
@@ -104,15 +115,39 @@ export default function Page() {
     userGroup: string;
     ticketSubject: string;
     ticketStatus: string;
+    ticketDescription: string;
     ticketCreateDate: string;
   }
 
-
   interface tokenPayload {
+    accountId: string;
     name: string;
     role: string;
     fullName: string;
   }
+  const navigate = useRouter();
+  const handleSubmitReply = async ()=>{
+    setReplyText("");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/ticket/addReply`,{
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")!}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        accountId,
+        replyText,
+        ticketId
+      }),
+    });
+    if(response.ok){
+      setDialogOpen(false);
+      navigate.refresh();
+    }else{
+      alert("somting went wrong");
+    }
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,7 +173,8 @@ export default function Page() {
         setRows(data.items);
         setTotal(data.totalCount);
         setFullName(token.fullName);
-        console.log(token);
+        setAccountId(token.accountId);
+        console.log(token.accountId);
       } catch (err) {
         console.error("Failed to fetch tickets:", err);
       }
@@ -344,7 +380,7 @@ export default function Page() {
           open={dialogOpen}
           onClose={handleDialogClose}
         >
-          <DialogTitle textAlign={"center"}>جزئیات تیکت</DialogTitle>
+          <DialogTitle sx={{display:'flex', justifyContent:'space-between'}} textAlign={"center"}>جزئیات تیکت <Button color="error">بستن تیکت</Button></DialogTitle>
           <DialogContent>
             <DialogContentText></DialogContentText>
 
@@ -353,45 +389,82 @@ export default function Page() {
                 overflow: "auto",
                 height: "40rem",
                 padding: 1,
-                display: "flex",
-                gap: 2,
-                flexWrap: "wrap",
-                flexDirection: "row",
-                justifyContent: "flex-start",
               }}
             >
               {selectedTicket && (
-                <Card
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Card
+                    sx={{
+                      borderRadius: 5,
+                      width: "60%",
+                      boxShadow: 3,
+                      height: "fit-content",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        sx={{ color: "text.secondary", fontSize: 14 }}
+                      >
+                        <AccountCircle /> {selectedTicket.userGroup}
+                      </Typography>
+                      <Typography variant="h5">
+                        {selectedTicket.ticketSubject}
+                      </Typography>
+                      <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
+                        {selectedTicket.ticketStatus}
+                      </Typography>
+                      <Typography variant="body2">
+                        تاریخ ثبت: {selectedTicket.ticketCreateDate}
+                      </Typography>
+                      <Typography>
+                        {selectedTicket.ticketDescription}
+                      </Typography>
+                    </CardContent>
+                    <CardActions></CardActions>
+                  </Card>
+                </Box>
+              )}
+              
+              {/* Map over ticketReplies */}
+              {accountId && ticketReplies.map((reply, index) => (
+                <Box
+                  key={index}
                   sx={{
-                    width: "40%",
-                    boxShadow: 3,
-                    height: "40%",
-                    marginRight: "auto", // or marginRight: "auto" for alternate layout
+                    display: "flex",
+                    justifyContent:
+                      reply.account.accountID.toString() === accountId
+                        ? "flex-start"
+                        : "flex-end",
                   }}
                 >
-                  <CardContent>
-                    <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
-                      <AccountCircle /> {selectedTicket.userGroup}
-                    </Typography>
-                    <Typography variant="h5">
-                      {selectedTicket.ticketSubject}
-                    </Typography>
-                    <Typography sx={{ color: "text.secondary", mb: 1.5 }}>
-                      {selectedTicket.ticketStatus}
-                    </Typography>
-                    <Typography variant="body2">
-                      تاریخ ثبت: {selectedTicket.ticketCreateDate}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small">بیشتر</Button>
-                  </CardActions>
-                </Card>
-              )}
+                  <Card
+                    sx={{
+                      borderRadius: 5,
+                      marginTop: 5,
+                      width: "60%",
+                      boxShadow: 3,
+                      backgroundColor:
+                        reply.account.accountID.toString() === accountId ? "#d9fdd3" : "white",
+                    }}
+                  >
+                    <CardContent>
+                      <Typography
+                        sx={{ color: "text.secondary", fontSize: 12 }}
+                      >
+                        پاسخ از کاربر {reply.account.fullName} -{" "}
+                        {new Date(reply.replyDate).toLocaleString("fa-IR")}
+                      </Typography>
+                      <Typography variant="body1" sx={{ marginTop: 1 }}>
+                        {reply.text}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
+              ))}
             </Box>
 
             <Box sx={{ display: "flex", gap: 2 }}>
-              <Button>
+              <Button onClick={handleSubmitReply}>
                 <Send />
               </Button>
               <OutlinedInput
@@ -406,6 +479,8 @@ export default function Page() {
                     </IconButton>
                   </InputAdornment>
                 }
+                value={replyText}
+                onChange={(e)=>{setReplyText(e.target.value);}}
               ></OutlinedInput>
             </Box>
           </DialogContent>
